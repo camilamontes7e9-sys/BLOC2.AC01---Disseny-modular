@@ -1,1 +1,2 @@
 # BLOC2.AC01---Disseny-modular
+ayudaaaaaaa
