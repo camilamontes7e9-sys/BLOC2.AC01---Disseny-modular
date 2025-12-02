@@ -1,107 +1,103 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
+using System;
 
 namespace Program
 {
     public class Program
     {
-        public static void Main() 
+        public static void Main()
         {
             const string InitialMsg = "This program will convert a decimal number for a temperature to another temperature system";
             const string ChooseOp = "Choose an option to convert: ";
             const string OptionOne = "1-From Celsius to Fahrenheit";
-            const string OptionTwo = "2-From Fahrenheit to Celcius";
-            const string OptionTree = "3-From Celcius to Kelvin";
+            const string OptionTwo = "2-From Fahrenheit to Celsius";
+            const string OptionThree = "3-From Celsius to Kelvin";
             const string ErrorMsg = "Error, enter a valid input.";
             const string EnterDecimal = "Enter the decimal number to convert it";
+            const string TryAgainMsg = "Try again: ";
 
             Console.WriteLine(InitialMsg);
             Console.WriteLine(ChooseOp);
             Console.WriteLine(OptionOne);
             Console.WriteLine(OptionTwo);
-            Console.WriteLine(OptionTree);
-            Console.WriteLine(OptionOne);
+            Console.WriteLine(OptionThree);
 
-            int input;
-            float decimalNumberTwo;
-
-            try
+            int input = 0;
+            float decimalNumberTwo = 0;
+            bool validOption = false;
+            while (!validOption)
             {
-                input = Convert.ToInt32(Console.ReadLine());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(ErrorMsg);
-            }
+                try
+                {
+                    input = Convert.ToInt32(Console.ReadLine());
 
-
-            switch (input)
-            {
-                case 1:
-                    Console.WriteLine(EnterDecimal);
-                    try
-                    {
-                        decimalNumberTwo = Convert.ToSingle(Console.ReadLine());
-                    }
-                    catch
+                    if (input < 1 || input > 3)
                     {
                         Console.WriteLine(ErrorMsg);
+                        Console.Write(TryAgainMsg);
                     }
-                    ConvertTemperature(decimalNumberTwo);
-                    break;
-                case 2:
-                    Console.WriteLine(EnterDecimal);
-                    try
+                    else
                     {
-                        decimalNumberTwo = Convert.ToSingle(Console.ReadLine());
+                        validOption = true;
                     }
-                    catch
-                    {
-                        Console.WriteLine(ErrorMsg);
-                    }
-                    ConvertTemperature(decimalNumberTwo);
-                    break;
-                case 3:
-                    Console.WriteLine(EnterDecimal);
-                    try
-                    {
-                        decimalNumberTwo = Convert.ToSingle(Console.ReadLine());
-                    }
-                    catch
-                    {
-                        Console.WriteLine(ErrorMsg);
-                    }
-                    ConvertTemperature(decimalNumberTwo);
-                    break;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine(ErrorMsg);
+                    Console.Write(TryAgainMsg);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine(ErrorMsg);
+                    Console.Write(TryAgainMsg);
+                }
             }
-           
+            Console.WriteLine(EnterDecimal);
+            bool validFloat = false;
+            while (!validFloat)
+            {
+                
+                try
+                {
+                    decimalNumberTwo = Convert.ToSingle(Console.ReadLine());
+
+                    if (decimalNumberTwo % 1 == 0)
+                    {
+                        Console.WriteLine(ErrorMsg);
+                        Console.Write(TryAgainMsg);
+                        continue;
+                    }
+
+                    validFloat = true;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine(ErrorMsg);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine(ErrorMsg);
+                }
+            }
+
+            ConvertTemperature(input, decimalNumberTwo);
         }
-        public static float ConvertTemperature(float decimalNumberTwo)
+        public static float ConvertTemperature(int input, float decimalNumber)
         {
-            const string CelciusToFahrenheit = "You converted {0}Cº to {1}ºF";
-            const string FahrenheitToCelcius = "You conveted {0}ºF to {1}Cº";
-            const string CelciusToKelvin = "You converted {0}Cº to {1}K";
             
-            int input;
-            float decimalNumber;
-            float secondNum = decimalNumber;
-
+            float original = decimalNumber;
             switch (input)
             {
                 case 1:
                     decimalNumber = decimalNumber * 9 / 5 + 32;
-                    Math.Round(decimalNumber, 2);
-                    Console.WriteLine(CelciusToFahrenheit, secondNum, decimalNumber);
+                    Console.WriteLine($"You converted {original}°C to {decimalNumber:F2}°F");
                     break;
                 case 2:
                     decimalNumber = (decimalNumber - 32) * 5 / 9;
-                    Math.Round(decimalNumber, 2);
-                    Console.WriteLine(FahrenheitToCelcius, secondNum, decimalNumber);
+                    Console.WriteLine($"You converted {original}°F to {decimalNumber:F2}°C");
                     break;
                 case 3:
                     decimalNumber = decimalNumber + 273.15f;
-                    Math.Round(decimalNumber, 2);
-                    Console.WriteLine(CelciusToKelvin, secondNum, decimalNumber);
+                    Console.WriteLine($"You converted {original}°C to {decimalNumber:F2} K");
                     break;
             }
             return decimalNumber;
